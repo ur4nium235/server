@@ -249,8 +249,69 @@ np_resource = np.dtype([("resource", np.ubyte, (1,))])
 
 ![](./img_tutorial/fixed.png)  
 
-`Total time viết docs ~ 2 tiếng`
 
-#### Goodluck  
+### Fix result label_image 
+
+> Chúng ta có thể định dạng đầu ra theo ý muốn trong file scripts/label_image.py   
+
+**Chỉ lấy 1 label trả về**  
+
+* Trong file `scripts/label_image.py` tìm đoạn code   
+
+```python
+```python
+  top_k = results.argsort()[-5:][::-1]
+  labels = load_labels(label_file)
+
+  # print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
+  template = "{} (score={:2.2f})"
+  # for i in top_k:
+  #   print(template.format(labels[i], results[i]))
+
+
+  result = template.format(labels[top_k[0]], 100*results[top_k[0]])
+```  
+
+* Sửa:  
+
+`Thay đoạn này trong file code trên`  
+
+```python
+result = template.format(labels[top_k[0]], 100*results[top_k[0]])
+```
+
+`Thành đoạn code này:`  
+
+```python
+result = labels[top_k[0]]
+```  
+
+> Như vậy đã sửa xong phần 1 lấy ra 1 nhãn, để có thể hiểu chi tiết hơn, chúng ta sẽ đá qua phần xử lý để hiểu rõ hơn 
+
+
+**Quay lại một chút về phần xử lý**
+
+> Lấy k phần tử lớn nhất của mảng theo index     
+
+* `arr = [1.48,1.41,0.0,0.1]`: mảng các phần tử ban đầu 
+  * index = [0, 1, 2, 3]: mảng các index ban đầu của `arr`
+* `arr.argsort()`: trả về chỉ mục của array được sắp xếp tăng dần (phần tử cuối cùng là phần tử lớn nhất, phần tử đầu tiên là phần tử nhỏ nhất) 
+  * Thứ tự index sau khi dùng `argsort`: `arr_index_sort_asc = arr.argsort() = [2, 3, 1, 0]`
+* `arr_index_sort_asc[-k:]` : lấy k giá trị cuối cùng của mảng
+  * `sub_arr_index_sort_asc = arr_index_sort_asc[-2:] = [1, 0]`  
+* `sub_arr_index_sort_asc[::-1]`: đảo ngược kết quả của mảng 
+  * `top_k = sub_arr_index_sort_asc[::-1] = [0, 1]`
+* Viết ngắn gọn: `top_k = arr.argsort()[-2:][::-1] = [0, 1]`
+
+* Dòng 108 file `label_image.py` có đoạn: 
+
+```python
+template = "{} (score={:2.2f})"
+```  
+> Định nghĩa output khi trả về, gồm 1 label, và 1 số kiểu double (lấy 2 số trước dấu phẩy và 2 số sau dấu phẩy)  
+
+Ví dụ: `"apple (score=95.51)"` 
+
+#### Good luck  
 
 

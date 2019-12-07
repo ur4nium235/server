@@ -105,11 +105,12 @@ def prediction(file_name):
   labels = load_labels(label_file)
 
   # print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
-  template = "{} (score={:2.2f})"
+  # template = "{} (score={:2.2f})"
   # for i in top_k:
   #   print(template.format(labels[i], results[i]))
 
 
-  result = template.format(labels[top_k[0]], 100*results[top_k[0]])
+  # result = template.format(labels[top_k[0]], 100*results[top_k[0]])
+  result = labels[top_k[0]]
 
   return result
